@@ -3,6 +3,11 @@ Wstępny plan laboratoriow. Modyfikowanie w celu polepszenia planu bardzo mile w
 Lab1:
 	Atrybuty, Regresja liniowa, wielomianowa, Przeuczenie (z wizualizacjami)
 Lab2:
-	Klasyfikacja dwuklasowa (regresja logistyczna) [roznice wzgledem regresji], Regresja logistyczna vs. Perceptron, F. aktywacji - Sigmoida, ReLU, cos jeszcze?, zlozenie neuronow
+	Klasyfikacja dwuklasowa (regresja logistyczna) [roznice wzgledem regresji], 
+	Regresja logistyczna vs. Perceptron, F. aktywacji - Sigmoida, ReLU.
+	Złożenie neuronów w perceptron wielowatstwowy. Uczenie nielinowych funkcji decyzyjnych. Backprop. 
 Lab3:
-	Praktyczne zastosowanie sieci neuronowych - mnist lub klasyfikacja psy/koty
+	Krótko o obliczeniach symbolicznych.
+	Wprowadzenie do higher-lvl interface: keras
+	Ćwiczenia z budowania modelu / implementacji warstw
+	Przykład z rozpoznawaniem X.

@@ -10,4 +10,5 @@ Lab3:
 	Krótko o obliczeniach symbolicznych.
 	Wprowadzenie do higher-lvl interface: keras
 	Ćwiczenia z budowania modelu / implementacji warstw
+	Intro do ConvNets
 	Przykład z rozpoznawaniem X.

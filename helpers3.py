@@ -1,55 +1,15 @@
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from matplotlib.ticker import MaxNLocator
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import matplotlib.pyplot as plt
-from scipy import array, newaxis
-
-# Marcin ---
 import numpy as np
-tf = None
+import tensorflow as tf
+import seaborn as sns
+from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix
+import itertools
 
 from IPython.core.display import display, HTML
 from IPython.display import clear_output, Image, display, HTML
-# ---
 
-def visualize_cost_function(sizes_transformed, prices_transformed, w0_values, w1_values, loss_function):
-	points = []
-	for i in w0_values:
-	    for j in w1_values:
-	        points.append([i, j, loss_function(sizes_transformed, prices_transformed, i,j)])
-	points = array(points)
-
-	Xs = points[:,0]
-	Ys = points[:,1]
-	Zs = points[:,2]
-
-
-	fig = plt.figure()
-
-
-	ax = fig.add_subplot(111, projection='3d')
-	surf = ax.plot_trisurf(Xs, Ys, Zs, cmap=plt.cm.coolwarm, linewidth=0)
-
-	fig.colorbar(surf)
-	ax.xaxis.set_major_locator(MaxNLocator(5))
-	ax.yaxis.set_major_locator(MaxNLocator(6))
-	ax.zaxis.set_major_locator(MaxNLocator(5))
-	ax.set_title('Wartosc f.kosztu w dziedzinie wartosci w0 i w1')
-	ax.set_zlabel('Wartosc f. kosztu')
-	ax.set_xlabel('Wartosc wagi w0')
-	ax.set_ylabel('Wartosc wagi w1')
-	fig.tight_layout()
-
-	plt.show() 
 	
-	
-
-# Marcin ---
 def execute_tf_graph(outputs, inputs=None):
-    if tf is None:
-    	import tensorflow as tf
-    
     if type(outputs) not in {list, tuple}:
         outputs = [outputs]
     
@@ -74,19 +34,14 @@ def strip_consts(graph_def, max_const_size=32):
             if size > max_const_size:
                 tensor.tensor_content = "<stripped %d bytes>"%size
     return strip_def
+    
 
-def show_graph(graph_def=None, width=600, height=300, max_const_size=32, ungroup_gradients=False):
-    if not graph_def:
-        graph_def = tf.get_default_graph().as_graph_def()
-        
-    """Visualize TensorFlow graph."""
-    if hasattr(graph_def, 'as_graph_def'):
-        graph_def = graph_def.as_graph_def()
+def show_graph(graph_def, width=600, height=300, max_const_size=32, ungroup_gradients=False):
     strip_def = strip_consts(graph_def, max_const_size=max_const_size)
     data = str(strip_def)
+    
     if ungroup_gradients:
         data = data.replace('"gradients/', '"b_')
-        #print(data)
     code = """
         <script>
           function load() {{
@@ -103,4 +58,30 @@ def show_graph(graph_def=None, width=600, height=300, max_const_size=32, ungroup
         <iframe seamless style="width:{}px;height:{}px;border:0" srcdoc="{}"></iframe>
     """.format(width, height, code.replace('"', '&quot;'))
     display(HTML(iframe))
-# ---
+    
+
+def plot_confusion_matrix(y, preds, title='Confusion matrix', cmap=plt.cm.Blues):   
+    classes = [i for i in range(10)]
+    cm = confusion_matrix(y, preds)
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    cm = np.round(cm, decimals=2)
+    
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    
+    

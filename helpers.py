@@ -23,6 +23,10 @@ def visualize_cost_function(sizes_transformed, prices_transformed, w0_values, w1
 	ax = fig.add_subplot(111, projection='3d')
 	surf = ax.plot_trisurf(Xs, Ys, Zs, cmap=plt.cm.coolwarm, linewidth=0)
 
+	# 'The left and right margins cannot be made large' tight_layout fix
+	for spine in ax.spines.values():
+	    spine.set_visible(False)
+
 	fig.colorbar(surf)
 	ax.xaxis.set_major_locator(MaxNLocator(5))
 	ax.yaxis.set_major_locator(MaxNLocator(6))
